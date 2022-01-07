@@ -14,12 +14,14 @@ import (
 	"unsafe"
 )
 
+// Struct for making an object before sending the data
 type MineHash struct {
 	GeneratedStr  string `json:"generated_string"`
 	GeneratedHash string `json:"generated_hash"`
 	SenderWallet  string `json:"sender_wallet_id"`
 }
 
+// Struct for storing user wallet
 type Wallet struct {
 	PrivateKey string `json:"private_key"`
 	PublicKey  string `json:"public_key"`
@@ -27,7 +29,7 @@ type Wallet struct {
 
 func main() {
 	URI := "http://localhost:8080/api/mine/upload/"
-	args := os.Args[1:]
+	args := os.Args[1:] // For getting the users wallet file
 	fmt.Println(args)
 	wallet_file := args[0]
 	fmt.Println(wallet_file)
@@ -40,7 +42,10 @@ func main() {
 	// sıradaki 100 random string api tarafından daha önceden hesaplanmamış olanlar gönderilir.
 	for {
 		if i < 10 {
+
+			// Creates a random string
 			randStr := RandStringBytesMaskImprSrcUnsafe(15)
+			// Finds the hash of the string
 			hash := sha256.Sum256([]byte(randStr))
 			fmt.Printf("'%x'\n", hash[:])
 			fmt.Println("URL:>", URI)
@@ -88,7 +93,7 @@ func RandStringBytesMaskImprSrcUnsafe(n int) string {
 	var src = rand.NewSource(time.Now().UnixNano())
 
 	b := make([]byte, n)
-	// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!
+	// A src.Int63() generates 63 random bits, enough for letterIdxMax characters
 	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
 		if remain == 0 {
 			cache, remain = src.Int63(), letterIdxMax
